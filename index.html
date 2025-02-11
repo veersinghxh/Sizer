@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clothing Size Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            background-color: #f0f0f0;
+            background-image: url('cap.jpeg');
+            background-position: top left, bottom right;
+            background-repeat: no-repeat, no-repeat;
+            background-size: 2000px 2000px, 150px 150px;
+        }
+        .header {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 450px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: white;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .footer {
+            background-color: #343a40;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        #preview {
+            width: 200px;
+            height: auto;
+            margin: 10px auto;
+            display: none;
+            border: 2px solid #ccc;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #result {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+           
+        }
+        
+       
+  
+    </style>
+</head>
+<body>
+    
+
+    <div class="header">Clothing Size Finder</div>
+
+    <div class="container">
+        <h2>Find Your Clothing Size</h2>
+
+        <!-- Upload Body Image -->
+        <label for="imageUpload"><strong>Upload Your Body Image (Mandatory):</strong></label>
+        <input type="file" id="imageUpload" accept="image/*" required>
+        <img id="preview" src="#" alt="Body Image Preview">
+
+        <!-- Select Gender -->
+        <label for="gender"><strong>Select Gender:</strong></label>
+        <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+
+        <!-- Enter Height -->
+        <label for="height"><strong>Height (cm):</strong></label>
+        <input type="number" id="height" placeholder="Enter height in cm">
+
+        <!-- Enter Weight -->
+        <label for="weight"><strong>Weight (kg):</strong></label>
+        <input type="number" id="weight" placeholder="Enter weight in kg">
+
+        <!-- Select Body Type -->
+        <label for="bodyType"><strong>Select Body Type:</strong></label>
+        <select id="bodyType">
+            <option value="slim">Slim</option>
+            <option value="average">Average</option>
+            <option value="heavy">Heavy</option>
+        </select>
+
+        <button onclick="findSize()">Find My Size</button>
+
+        <p id="result"></p>
+    </div>
+
+    <div class="footer">&copy; 2025 Clothing Size Finder. All Rights Reserved.</div>
+
+    <script>
+        // Image Preview Function
+        document.getElementById("imageUpload").addEventListener("change", function(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const img = document.getElementById("preview");
+                img.src = reader.result;
+                img.style.display = "block";
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+
+        // Find Clothing Size Function
+        function findSize() {
+            const imageUploaded = document.getElementById("imageUpload").files.length;
+            const gender = document.getElementById("gender").value;
+            const height = parseInt(document.getElementById("height").value);
+            const weight = parseInt(document.getElementById("weight").value);
+            const bodyType = document.getElementById("bodyType").value;
+
+            if (imageUploaded === 0) {
+                document.getElementById("result").innerText = "Please upload your product clothes image.";
+                return;
+            }
+            
+            if (!height || !weight) {
+                document.getElementById("result").innerText = "Please enter valid height and weight.";
+                return;
+            }
+
+            let size = "";
+
+            if (gender === "male") {
+                if (bodyType === "slim") {
+                    if (height < 165 && weight < 55) size = "S";
+                    else if (height < 175 && weight < 65) size = "M";
+                    else size = "L";
+                } else if (bodyType === "average") {
+                    if (height < 165 && weight < 65) size = "M";
+                    else if (height < 175 && weight < 75) size = "L";
+                    else size = "XL";
+                } else {
+                    if (height < 165 && weight < 75) size = "L";
+                    else if (height < 175 && weight < 85) size = "XL";
+                    else size = "XXL";
+                }
+            } else {
+                if (bodyType === "slim") {
+                    if (height < 155 && weight < 45) size = "XS";
+                    else if (height < 165 && weight < 55) size = "S";
+                    else size = "M";
+                } else if (bodyType === "average") {
+                    if (height < 155 && weight < 55) size = "S";
+                    else if (height < 165 && weight < 65) size = "M";
+                    else size = "L";
+                } else {
+                    if (height < 155 && weight < 65) size = "M";
+                    else if (height < 165 && weight < 75) size = "L";
+                    else size = "XL";
+                }
+            }
+
+            document.getElementById("result").innerText = `Recommended Size: ${size}`;
+        }
+    </script>
+
+</body>
+</html>
