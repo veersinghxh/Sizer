@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clothing Size Finder</title>
     <style>
+        
+        
+        
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -14,7 +17,6 @@
             background-position: top left, bottom right;
             background-repeat: no-repeat, no-repeat;
             background-size: 2000px 2000px, 150px 150px;
-        }
         .header {
             background-color: black;
             color: white;
@@ -31,15 +33,6 @@
             background-color: white;
             box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
         }
-        .footer {
-            background-color: #343a40;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
         #preview {
             width: 200px;
             height: auto;
@@ -49,7 +42,7 @@
             padding: 5px;
             border-radius: 5px;
         }
-        input, select, button {
+        input, select, button, textarea {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -67,47 +60,47 @@
             background-color: #218838;
         }
         #result {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             color: #333;
             margin-top: 10px;
-           
         }
-        
-       
-  
+        .feedback-container {
+            text-align: left;
+            margin-top: 20px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 10px;
+        }
+        .feedback-item {
+            padding: 5px;
+            border-bottom: 1px solid #ccc;
+        }
     </style>
 </head>
 <body>
-    
 
-    <div class="header">Sizer.com</div>
+    <div class="header">Clothing Size Finder</div>
 
     <div class="container">
-        <h2>AI base Finder Your Clothing Size</h2>
-        
+        <h2>Find Your Clothing Size</h2>
 
-        <!-- Upload Body Image -->
-        <label for="imageUpload"><strong>Upload Your clothes screenshot find to size (Mandatory):</strong></label>
-        <input type="file" id="imageUpload" accept="image/*" required>
-        <img id="preview" src="#" alt="Body Image Preview">
+        <label for="imageUpload"><strong>Upload Your Clothing Screenshot:</strong></label>
+        <input type="file" id="imageUpload" accept="image/*">
+        <img id="preview" src="#" alt="Image Preview">
 
-        <!-- Select Gender -->
         <label for="gender"><strong>Select Gender:</strong></label>
         <select id="gender">
             <option value="male">Male</option>
             <option value="female">Female</option>
         </select>
 
-        <!-- Enter Height -->
         <label for="height"><strong>Height (cm):</strong></label>
         <input type="number" id="height" placeholder="Enter height in cm">
 
-        <!-- Enter Weight -->
         <label for="weight"><strong>Weight (kg):</strong></label>
         <input type="number" id="weight" placeholder="Enter weight in kg">
 
-        <!-- Select Body Type -->
         <label for="bodyType"><strong>Select Body Type:</strong></label>
         <select id="bodyType">
             <option value="slim">Slim</option>
@@ -118,11 +111,25 @@
         <button onclick="findSize()">Find My Size</button>
 
         <p id="result"></p>
+
+        <!-- Feedback Section -->
+        <h3>Feedback</h3>
+        <textarea id="feedback" placeholder="Enter your feedback here..."></textarea>
+        <button onclick="submitFeedback()">Submit Feedback</button>
+
+        <!-- Display Feedback -->
+        <div class="feedback-container">
+            <h3>User Feedback</h3>
+            <div id="feedbackList"></div>
+        </div>
     </div>
 
-    <div class="footer">&copy; 2025 Clothing Size Finder. All Rights Reserved.</div>
-
     <script>
+        // Load stored feedback when the page loads
+        window.onload = function() {
+            loadFeedback();
+        };
+
         // Image Preview Function
         document.getElementById("imageUpload").addEventListener("change", function(event) {
             const reader = new FileReader();
@@ -143,7 +150,7 @@
             const bodyType = document.getElementById("bodyType").value;
 
             if (imageUploaded === 0) {
-                document.getElementById("result").innerText = "Please upload your product clothes image.";
+                document.getElementById("result").innerText = "Please upload your clothing image.";
                 return;
             }
             
@@ -156,35 +163,53 @@
 
             if (gender === "male") {
                 if (bodyType === "slim") {
-                    if (height < 165 && weight < 55) size = "S";
-                    else if (height < 175 && weight < 65) size = "M";
-                    else size = "L";
+                    size = (height < 165 && weight < 55) ? "S" : (height < 175 && weight < 65) ? "M" : "L";
                 } else if (bodyType === "average") {
-                    if (height < 165 && weight < 65) size = "M";
-                    else if (height < 175 && weight < 75) size = "L";
-                    else size = "XL";
+                    size = (height < 165 && weight < 65) ? "M" : (height < 175 && weight < 75) ? "L" : "XL";
                 } else {
-                    if (height < 165 && weight < 75) size = "L";
-                    else if (height < 175 && weight < 85) size = "XL";
-                    else size = "XXL";
+                    size = (height < 165 && weight < 75) ? "L" : (height < 175 && weight < 85) ? "XL" : "XXL";
                 }
             } else {
                 if (bodyType === "slim") {
-                    if (height < 155 && weight < 45) size = "XS";
-                    else if (height < 165 && weight < 55) size = "S";
-                    else size = "M";
+                    size = (height < 155 && weight < 45) ? "XS" : (height < 165 && weight < 55) ? "S" : "M";
                 } else if (bodyType === "average") {
-                    if (height < 155 && weight < 55) size = "S";
-                    else if (height < 165 && weight < 65) size = "M";
-                    else size = "L";
+                    size = (height < 155 && weight < 55) ? "S" : (height < 165 && weight < 65) ? "M" : "L";
                 } else {
-                    if (height < 155 && weight < 65) size = "M";
-                    else if (height < 165 && weight < 75) size = "L";
-                    else size = "XL";
+                    size = (height < 155 && weight < 65) ? "M" : (height < 165 && weight < 75) ? "L" : "XL";
                 }
             }
 
             document.getElementById("result").innerText = `Recommended Size: ${size}`;
+        }
+
+        // Submit Feedback Function
+        function submitFeedback() {
+            const feedback = document.getElementById("feedback").value.trim();
+            if (feedback === "") {
+                alert("Please enter feedback before submitting.");
+                return;
+            }
+
+            let feedbackList = JSON.parse(localStorage.getItem("feedbackData")) || [];
+            feedbackList.push(feedback);
+            localStorage.setItem("feedbackData", JSON.stringify(feedbackList));
+
+            document.getElementById("feedback").value = "";
+            loadFeedback();
+        }
+
+        // Load Feedback Function
+        function loadFeedback() {
+            const feedbackList = JSON.parse(localStorage.getItem("feedbackData")) || [];
+            const feedbackContainer = document.getElementById("feedbackList");
+            feedbackContainer.innerHTML = "";
+
+            feedbackList.forEach((feedback, index) => {
+                const feedbackItem = document.createElement("div");
+                feedbackItem.classList.add("feedback-item");
+                feedbackItem.innerText = `${index + 1}. ${feedback}`;
+                feedbackContainer.appendChild(feedbackItem);
+            });
         }
     </script>
 
